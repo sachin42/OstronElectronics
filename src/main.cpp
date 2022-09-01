@@ -16,8 +16,8 @@ STM32RTC &rtc = STM32RTC::getInstance();
 #endif /* !STM32F1xx */
 
 #define INITIAL_SEC 10
-#define INITIAL_MIN 39
-#define INITIAL_HOUR 15
+#define INITIAL_MIN 22
+#define INITIAL_HOUR 20
 #define INITIAL_WDAY 4
 #define INITIAL_DAY 1
 #define INITIAL_MONTH 9
@@ -43,7 +43,7 @@ byte day;
 byte month;
 byte year;
 
-String device_number = "119";
+String device_number = "117";
 
 bool initialstatus = false;
 
@@ -73,9 +73,9 @@ int ThermistorPin;
 int temp[num_therm_samples];
 float temp_avg;
 int Vo;
-float logRt, Rt, T;
-float R = 9000;                                                         // Fixed resitance of the series resistor plus wire resistance (calibrated)
-float c1 = 1.484778004e-03, c2 = 2.348962910e-04, c3 = 1.006037158e-07; // Based on VWP Manual calibration statistics.
+float logR2, R2, T, Tc;
+float R1 = 10000;                                                        // Fixed resitance of the series resistor plus wire resistance (calibrated)
+float c1 = 1.009249522e-03, c2 = 2.378405444e-04, c3 = 2.019202697e-07; // Based on VWP Manual calibration statistics.
 String dataString;
 
 void ShowSerialData()
@@ -239,16 +239,18 @@ void fft()
     pinMode(PA1, INPUT_ANALOG);
     delay(200);
     digitalWrite(PA4, HIGH); // ADJUST!!!
-    delay(200);              // delay for powering up
+    delay(100);             // delay for powering up
 
     for (int i = 0; i < num_therm_samples; i++)
     {
-        Vo = map(analogRead(PA1),0,4095,0,1023);
-        Rt = R / ((1024 / Vo) - 1.0);
-        logRt = log(Rt);
-        T = (1.0 / (c1 + c2 * logRt + c3 * logRt * logRt * logRt)) - 273.15;
-        temp[i] = T;
-        delay(10);
+        Vo = analogRead(PA1);
+        Serial1.println(Vo);
+        R2 = R1 * (1023.0 / (float)Vo - 1.0);
+        logR2 = log(R2);
+        T = (1.0 / (c1 + c2 * logR2 + c3 * logR2 * logR2 * logR2));
+        Tc = T - 273.15;
+        temp[i] = Tc;
+        delay(100);
     }
 
     temp_avg = 0.0;
@@ -379,7 +381,7 @@ void loop()
             {
                 sendData(String(Bunits), String(temp_avg), String(buf));
                 digitalWrite(PB13, LOW);
-                initialstatus=false;
+                initialstatus = false;
                 Serial1.println("Going into Sleep for 12 hours");
                 delay(1000);
                 LowPower.deepSleep(43200000);
