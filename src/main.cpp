@@ -16,10 +16,10 @@ STM32RTC &rtc = STM32RTC::getInstance();
 #endif /* !STM32F1xx */
 
 #define INITIAL_SEC 10
-#define INITIAL_MIN 22
-#define INITIAL_HOUR 20
-#define INITIAL_WDAY 4
-#define INITIAL_DAY 1
+#define INITIAL_MIN 59
+#define INITIAL_HOUR 11
+#define INITIAL_WDAY 5
+#define INITIAL_DAY 2
 #define INITIAL_MONTH 9
 #define INITIAL_YEAR 22
 
