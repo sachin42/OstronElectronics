@@ -16,10 +16,10 @@ STM32RTC &rtc = STM32RTC::getInstance();
 #endif /* !STM32F1xx */
 
 #define INITIAL_SEC 10
-#define INITIAL_MIN 59
-#define INITIAL_HOUR 11
+#define INITIAL_MIN 22
+#define INITIAL_HOUR 0
 #define INITIAL_WDAY 5
-#define INITIAL_DAY 2
+#define INITIAL_DAY 23
 #define INITIAL_MONTH 9
 #define INITIAL_YEAR 22
 
@@ -43,7 +43,7 @@ byte day;
 byte month;
 byte year;
 
-String device_number = "117";
+String device_number = "120";
 
 bool initialstatus = false;
 
@@ -74,7 +74,7 @@ int temp[num_therm_samples];
 float temp_avg;
 int Vo;
 float logR2, R2, T, Tc;
-float R1 = 10000;                                                        // Fixed resitance of the series resistor plus wire resistance (calibrated)
+float R1 = 10000;                                                       // Fixed resitance of the series resistor plus wire resistance (calibrated)
 float c1 = 1.009249522e-03, c2 = 2.378405444e-04, c3 = 2.019202697e-07; // Based on VWP Manual calibration statistics.
 String dataString;
 
@@ -239,12 +239,12 @@ void fft()
     pinMode(PA1, INPUT_ANALOG);
     delay(200);
     digitalWrite(PA4, HIGH); // ADJUST!!!
-    delay(100);             // delay for powering up
+    delay(100);              // delay for powering up
 
     for (int i = 0; i < num_therm_samples; i++)
     {
         Vo = analogRead(PA1);
-        Serial1.println(Vo);
+        // Serial1.println(Vo);
         R2 = R1 * (1023.0 / (float)Vo - 1.0);
         logR2 = log(R2);
         T = (1.0 / (c1 + c2 * logR2 + c3 * logR2 * logR2 * logR2));
@@ -312,9 +312,7 @@ void setup()
     }
 
     pinMode(PB12, INPUT_PULLDOWN);
-
     pinMode(PB13, OUTPUT);
-
     pinMode(PC13, OUTPUT);
     digitalWrite(PC13, LOW);
 
