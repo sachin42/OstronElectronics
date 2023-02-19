@@ -2,6 +2,10 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"name": "Ostron4g",
+			"path": "../Ostron4g"
 		}
 	],
 	"settings": {}
