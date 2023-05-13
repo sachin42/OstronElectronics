@@ -17,11 +17,11 @@ STM32RTC &rtc = STM32RTC::getInstance();
 
 #define INITIAL_SEC 10
 #define INITIAL_MIN 22
-#define INITIAL_HOUR 0
-#define INITIAL_WDAY 5
-#define INITIAL_DAY 23
-#define INITIAL_MONTH 9
-#define INITIAL_YEAR 22
+#define INITIAL_HOUR 20
+#define INITIAL_WDAY 2
+#define INITIAL_DAY 4
+#define INITIAL_MONTH 4
+#define INITIAL_YEAR 23
 
 #define SAMPLES 256             // Must be a power of 2 (for FFT algorithm)
 #define SAMPLING_FREQUENCY 7000 // Hz, must be less than 10000 due to ADC and double the frequency you are trying to sample
@@ -43,7 +43,7 @@ byte day;
 byte month;
 byte year;
 
-String device_number = "120";
+String device_number = "139";
 
 bool initialstatus = false;
 
